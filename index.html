@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-content">
+            <h1 class="logo">📚 Student Attendance System</h1>
+            <nav class="nav-menu">
+                <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+                <button class="nav-btn" data-section="students">Students</button>
+                <button class="nav-btn" data-section="attendance">Mark Attendance</button>
+                <button class="nav-btn" data-section="report">Reports</button>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Dashboard Section -->
+        <div class="section active" id="dashboard">
+            <h2>Dashboard</h2>
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <p>Total Students</p>
+                        <p class="stat-number" id="totalStudents">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <p>Present Today</p>
+                        <p class="stat-number" id="presentToday">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">❌</div>
+                    <div class="stat-info">
+                        <p>Absent Today</p>
+                        <p class="stat-number" id="absentToday">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Students Section -->
+        <div class="section" id="students">
+            <h2>Manage Students</h2>
+            
+            <div class="form-section">
+                <h3>Add New Student</h3>
+                <form id="studentForm" class="form">
+                    <div class="form-group">
+                        <label>Roll Number *</label>
+                        <input type="text" id="rollNumber" placeholder="e.g., 001" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Name *</label>
+                        <input type="text" id="studentName" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="studentEmail" placeholder="email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Class/Section *</label>
+                        <input type="text" id="className" placeholder="e.g., 10A" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Student</button>
+                </form>
+            </div>
+
+            <div class="table-section">
+                <h3>Student List</h3>
+                <table id="studentsTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>Roll No.</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Class</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <tr><td colspan="5" class="text-center">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Attendance Section -->
+        <div class="section" id="attendance">
+            <h2>Mark Attendance</h2>
+            
+            <div class="form-section">
+                <h3>Record Attendance</h3>
+                <div class="form-group">
+                    <label>Date *</label>
+                    <input type="date" id="attendanceDate">
+                </div>
+                <button class="btn btn-secondary" id="loadAttendanceBtn">Load Attendance for Date</button>
+            </div>
+
+            <div class="table-section">
+                <h3>Attendance Records</h3>
+                <table id="attendanceTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>Roll No.</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                            <th>Save</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTableBody">
+                        <tr><td colspan="5" class="text-center">Select a date to load attendance</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Report Section -->
+        <div class="section" id="report">
+            <h2>Attendance Reports</h2>
+            
+            <div class="form-section">
+                <h3>Generate Report</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Start Date *</label>
+                        <input type="date" id="reportStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date *</label>
+                        <input type="date" id="reportEndDate">
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="generateReportBtn">Generate Report</button>
+                <button class="btn btn-secondary" id="exportReportBtn" style="display:none;">Export as CSV</button>
+            </div>
+
+            <div class="table-section">
+                <h3>Attendance Report</h3>
+                <table id="reportTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>Roll No.</th>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Total Days</th>
+                            <th>Present</th>
+                            <th>Absent</th>
+                            <th>Late</th>
+                            <th>Leave</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportTableBody">
+                        <tr><td colspan="9" class="text-center">Select dates and generate report</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for editing student -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Edit Student</h3>
+            <form id="editStudentForm" class="form">
+                <input type="hidden" id="editStudentId">
+                <div class="form-group">
+                    <label>Roll Number</label>
+                    <input type="text" id="editRollNumber" required>
+                </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="editStudentName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="editStudentEmail">
+                </div>
+                <div class="form-group">
+                    <label>Class</label>
+                    <input type="text" id="editClassName" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Student</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
